@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 function preload() {
 
@@ -17,10 +17,15 @@ var stars;
 var score = 0;
 var scoreText;
 
+var counter = 0.0;
+
 function create() {
 
+    //scaling
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    game.world.setBounds(0, 0, 4000, 600);
+
+    game.world.setBounds(0,0,4000,600);
+
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -42,8 +47,7 @@ function create() {
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
-    //  Now let's create two ledges
-
+    // //  Now let's create two ledges
     // var ledge = platforms.create(400, 400, 'ground');
     // ledge.body.immovable = true;
 
@@ -52,7 +56,6 @@ function create() {
 
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
-
 
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
@@ -71,6 +74,8 @@ function create() {
 
     //  We will enable physics for any star that is created in this group
     stars.enableBody = true;
+
+    game.camera.follow(player);
 
     //  Here we'll create 12 of them evenly spaced apart
     for (var i = 0; i < 12; i++)
@@ -95,7 +100,6 @@ function create() {
 
 function update() {
 
-    game.camera.follow(player);
     //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
     game.physics.arcade.collide(stars, platforms);
@@ -108,7 +112,7 @@ function update() {
 
     if (cursors.left.isDown)
     {
-        console.log(player.x);
+        
         //  Move to the left
         player.body.velocity.x = -150;
 
@@ -116,7 +120,21 @@ function update() {
     }
     else if (cursors.right.isDown)
     {
-        console.log(player.x);
+        console.log("Counter:: " + counter);
+        console.log("Player x:: " + player.x);
+        console.log(player.x - counter);
+        if((player.x - counter) >= 400 ){
+            var ground2 = platforms.create(counter*2, game.world.height - 64, 'ground');
+
+            //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
+            ground2.scale.setTo(2, 2);
+
+            //  This stops it from falling away when you jump on it
+            ground2.body.immovable = true;
+            counter+=400;
+        }
+        
+
         //  Move to the right
         player.body.velocity.x = 150;
 
