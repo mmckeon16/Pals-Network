@@ -17,7 +17,14 @@ var stars;
 var score = 0;
 var scoreText;
 
+var counter = 0.0;
+
 function create() {
+
+    //scaling
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+    game.world.setBounds(0,0,4000,600);
 
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -40,12 +47,12 @@ function create() {
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
-    //  Now let's create two ledges
-    var ledge = platforms.create(400, 400, 'ground');
-    ledge.body.immovable = true;
+    // //  Now let's create two ledges
+    // var ledge = platforms.create(400, 400, 'ground');
+    // ledge.body.immovable = true;
 
-    ledge = platforms.create(-150, 250, 'ground');
-    ledge.body.immovable = true;
+    // ledge = platforms.create(-150, 250, 'ground');
+    // ledge.body.immovable = true;
 
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
@@ -67,6 +74,8 @@ function create() {
 
     //  We will enable physics for any star that is created in this group
     stars.enableBody = true;
+
+    game.camera.follow(player);
 
     //  Here we'll create 12 of them evenly spaced apart
     for (var i = 0; i < 12; i++)
@@ -103,6 +112,7 @@ function update() {
 
     if (cursors.left.isDown)
     {
+        
         //  Move to the left
         player.body.velocity.x = -150;
 
@@ -110,6 +120,26 @@ function update() {
     }
     else if (cursors.right.isDown)
     {
+        console.log("Counter:: " + counter);
+        console.log("Player x:: " + player.x);
+        console.log(player.x - counter);
+        if((player.x - counter) >= 400 ){
+            counter+=400;
+            var ground2 = platforms.create(counter*2, game.world.height - 64, 'ground');
+
+            //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
+            ground2.scale.setTo(2, 2);
+
+            //  This stops it from falling away when you jump on it
+            ground2.body.immovable = true;
+
+            //add sky
+            game.add.sprite(counter*2, -64, 'sky');
+
+            
+        }
+        
+
         //  Move to the right
         player.body.velocity.x = 150;
 
