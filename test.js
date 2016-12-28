@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.CANVAS, '', { preload: preload, create: create, update: update });
 
 function preload() {
 
@@ -19,6 +19,8 @@ var scoreText;
 
 function create() {
 
+    this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.world.setBounds(0, 0, 4000, 600);
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -41,14 +43,16 @@ function create() {
     ground.body.immovable = true;
 
     //  Now let's create two ledges
-    var ledge = platforms.create(400, 400, 'ground');
-    ledge.body.immovable = true;
 
-    ledge = platforms.create(-150, 250, 'ground');
-    ledge.body.immovable = true;
+    // var ledge = platforms.create(400, 400, 'ground');
+    // ledge.body.immovable = true;
+
+    // ledge = platforms.create(-150, 250, 'ground');
+    // ledge.body.immovable = true;
 
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
+
 
     //  We need to enable physics on the player
     game.physics.arcade.enable(player);
@@ -91,6 +95,7 @@ function create() {
 
 function update() {
 
+    game.camera.follow(player);
     //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
     game.physics.arcade.collide(stars, platforms);
@@ -103,6 +108,7 @@ function update() {
 
     if (cursors.left.isDown)
     {
+        console.log(player.x);
         //  Move to the left
         player.body.velocity.x = -150;
 
@@ -110,6 +116,7 @@ function update() {
     }
     else if (cursors.right.isDown)
     {
+        console.log(player.x);
         //  Move to the right
         player.body.velocity.x = 150;
 
