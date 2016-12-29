@@ -16,6 +16,7 @@ var cursors;
 var stars;
 var score = 0;
 var scoreText;
+var inputText;
 
 var counter = 0.0;
 
@@ -81,7 +82,7 @@ function create() {
     for (var i = 0; i < 24; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 30, 0, 'star');
+        var star = stars.create(i * 2, 0, 'star');
 
         //  Let gravity do its thing
         star.body.gravity.y = 300;
@@ -92,10 +93,12 @@ function create() {
 
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
+    inputText = game.add.text(400, 16, 'nutin', { fontSize: '32px', fill: '#000' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
-    
+    game.input.keyboard.addCallbacks(this, null, null, keyPress);
+    inputText.fixedToCamera = true;
+
 }
 
 function update() {
@@ -134,7 +137,7 @@ function update() {
             ground2.body.immovable = true;
 
             //add sky
-            sky = game.add.sprite(counter*2, -32, 'sky');
+            sky = game.add.sprite(counter*2, 0, 'sky');
             game.world.sendToBack(sky);
         }
         
@@ -169,4 +172,10 @@ function collectStar (player, star) {
     score += 10;
     scoreText.text = 'Score: ' + score;
 
+}
+
+function keyPress(char){
+    console.log(char);
+    inputText.text += char;
+    //if( === )
 }
