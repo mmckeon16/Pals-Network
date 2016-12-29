@@ -19,6 +19,9 @@ var scoreText;
 var inputText;
 
 var counter = 0.0;
+var theWord = "cat";
+
+var canMove = true;
 
 function create() {
 
@@ -93,7 +96,7 @@ function create() {
 
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-    inputText = game.add.text(400, 16, 'nutin', { fontSize: '32px', fill: '#000' });
+    inputText = game.add.text(200, 16, '', { fontSize: '32px', fill: '#000' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
@@ -113,7 +116,7 @@ function update() {
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
 
-    if (cursors.left.isDown)
+    if (cursors.left.isDown && canMove)
     {
         
         //  Move to the left
@@ -121,7 +124,7 @@ function update() {
 
         player.animations.play('left');
     }
-    else if (cursors.right.isDown)
+    else if (cursors.right.isDown && canMove)
     {
         console.log("Counter:: " + counter);
         console.log("Player x:: " + player.x);
@@ -156,7 +159,7 @@ function update() {
     }
     
     //  Allow the player to jump if they are touching the ground.
-    if (cursors.up.isDown && player.body.touching.down)
+    if (cursors.up.isDown && player.body.touching.down && canMove)
     {
         player.body.velocity.y = -350;
     }
@@ -177,12 +180,25 @@ function collectStar (player, star) {
 function keyPress(char){
     if(game.input.keyboard.event.keyCode == 8){
         inputText.text = inputText.text.substring(0,inputText.text.length - 1);
-
     }else if(game.input.keyboard.event.keyCode == 13){
-        //do something..
+        var userText = inputText.text;
+        immobile();
+        checkWord(userText);
     }else{
         inputText.text += char;
         var code = char.charCodeAt(0);
         console.log(char + " charChodeAt : " + code + " Game input:: " + game.input.keyboard.event.keyCode);
     }    
+}
+
+function checkWord(userWord){
+    if(theWord == userWord){
+        //stuff
+        console.log("Shit happens!");
+        canMove = true;
+    }
+}
+
+function immobile(){
+    canMove = false;
 }
