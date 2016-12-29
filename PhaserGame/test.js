@@ -123,8 +123,8 @@ function update() {
         console.log("Counter:: " + counter);
         console.log("Player x:: " + player.x);
         console.log(player.x - counter);
-        if((player.x - counter) >= 400 ){
-            counter+=400;
+        if((player.x - counter) >= 200 ){
+            counter+=200;
             var ground2 = platforms.create(counter*2, game.world.height - 64, 'ground');
 
             //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
@@ -134,9 +134,8 @@ function update() {
             ground2.body.immovable = true;
 
             //add sky
-            game.add.sprite(counter*2, -64, 'sky');
-
-            
+            sky = game.add.sprite(counter*2, -32, 'sky');
+            game.world.sendToBack(sky);
         }
         
 
