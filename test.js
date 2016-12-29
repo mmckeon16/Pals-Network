@@ -12,6 +12,8 @@ function preload() {
 var player;
 var platforms;
 var cursors;
+var boundary;
+var boundary2;
 
 var stars;
 var score = 0;
@@ -22,6 +24,7 @@ var counter = 0.0;
 var theWord = "cat";
 
 var canMove = true;
+var starExists;
 
 function create() {
 
@@ -79,20 +82,17 @@ function create() {
     //  We will enable physics for any star that is created in this group
     stars.enableBody = true;
 
+    //  Create a star inside of the 'stars' group
+    var star = stars.create(400, 0, 'star');
+    starExists = true;
+
     game.camera.follow(player);
 
-    //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 24; i++)
-    {
-        //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 2, 0, 'star');
+    //  Let gravity do its thing
+    star.body.gravity.y = 300;
 
-        //  Let gravity do its thing
-        star.body.gravity.y = 300;
-
-        //  This just gives each star a slightly random bounce value
-        star.body.bounce.y = 0.7 + Math.random() * 0.2;
-    }
+    //  This just gives each star a slightly random bounce value
+    star.body.bounce.y = 0.7 + Math.random() * 0.2;
 
     //  The score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -105,6 +105,13 @@ function create() {
 }
 
 function update() {
+
+    if(!starExists){
+        game.camera.follow(player);
+    }
+    else{
+        game.camera.unfollow();
+    }
 
     //  Collide the player and the stars with the platforms
     game.physics.arcade.collide(player, platforms);
@@ -129,8 +136,11 @@ function update() {
         console.log("Counter:: " + counter);
         console.log("Player x:: " + player.x);
         console.log(player.x - counter);
-        if((player.x - counter) >= 200 ){
+        
+        if((player.x - counter) >= 200 && !starExists){
+            
             counter+=200;
+            
             var ground2 = platforms.create(counter*2, game.world.height - 64, 'ground');
 
             //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
@@ -171,9 +181,11 @@ function collectStar (player, star) {
     // Removes the star from the screen
     star.kill();
 
-    //  Add and update the score
-    score += 10;
-    scoreText.text = 'Score: ' + score;
+    //  make character not move
+
+    immobile();
+
+    starExists = false;
 
 }
 
