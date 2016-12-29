@@ -175,7 +175,14 @@ function collectStar (player, star) {
 }
 
 function keyPress(char){
-    console.log(char);
-    inputText.text += char;
-    //if( === )
+    if(game.input.keyboard.event.keyCode == 8){
+        inputText.text = inputText.text.substring(0,inputText.text.length - 1);
+
+    }else if(game.input.keyboard.event.keyCode == 13){
+        //do something..
+    }else{
+        inputText.text += char;
+        var code = char.charCodeAt(0);
+        console.log(char + " charChodeAt : " + code + " Game input:: " + game.input.keyboard.event.keyCode);
+    }    
 }
