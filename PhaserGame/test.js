@@ -78,10 +78,10 @@ function create() {
     game.camera.follow(player);
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 12; i++)
+    for (var i = 0; i < 24; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 70, 0, 'star');
+        var star = stars.create(i * 30, 0, 'star');
 
         //  Let gravity do its thing
         star.body.gravity.y = 300;
