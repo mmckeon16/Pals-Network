@@ -81,7 +81,7 @@ function create() {
     for (var i = 0; i < 24; i++)
     {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 30, 0, 'star');
+        var star = stars.create(i * 2, 0, 'star');
 
         //  Let gravity do its thing
         star.body.gravity.y = 300;
@@ -134,7 +134,7 @@ function update() {
             ground2.body.immovable = true;
 
             //add sky
-            sky = game.add.sprite(counter*2, -32, 'sky');
+            sky = game.add.sprite(counter*2, 0, 'sky');
             game.world.sendToBack(sky);
         }
         
