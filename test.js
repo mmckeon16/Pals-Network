@@ -211,16 +211,16 @@ function collectStar (player, star) {
 
 function keyPress(char){
     if(canType){
-    if(game.input.keyboard.event.keyCode == 8){
-        inputText.text = inputText.text.substring(0,inputText.text.length - 1);
-    }else if(game.input.keyboard.event.keyCode == 13){
-        var userText = inputText.text;
-        immobile();
-        checkWord(userText);
-    }else{
-        inputText.text += char;
-        var code = char.charCodeAt(0);
-    }
+        if(game.input.keyboard.event.keyCode == 8){
+            inputText.text = inputText.text.substring(0,inputText.text.length - 1);
+        }else if(game.input.keyboard.event.keyCode == 13){
+            var userText = inputText.text;
+            immobile();
+            checkWord(userText);
+        }else{
+            inputText.text += char;
+            var code = char.charCodeAt(0);
+        }
     }    
 }
 
@@ -230,6 +230,8 @@ function checkWord(userWord){
         //stuff to be implemented later to check word
         inputText.text = "Nice!"
         canMove = true;
+        canType = false;
+        checkpoint();
     }
     else{
         emptyText();
@@ -250,3 +252,38 @@ function emptyText(){
 function getRand(min, max) {
   return Math.random() * (max - min) + min;
 }
+
+function checkpoint(){
+    //get the star location
+    var starLocation = getRand(player.x, player.x + 800);
+    //create the star and add its physics
+    var star = stars.create(starLocation, 0, 'star');
+    star.body.gravity.y = 300;
+    star.body.bounce.y = 0.7 + Math.random() * 0.2;
+
+    //do something with like within the players range? SHIT
+        //starExists = true;
+
+    //create the platforms with jakes stuff
+
+
+    //create the invisible barriers
+
+    box = platforms.create(starLocation + 400,30);
+    box.scale.setTo(50,600);
+    box.enableBody = true;
+    box.body.immovable = true;
+    box.visible = false;
+    game.physics.arcade.enable(box);
+
+    game.physics.arcade.collide(player, box);
+
+
+
+
+
+
+
+}
+
+
