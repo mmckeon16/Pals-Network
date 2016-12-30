@@ -1,4 +1,5 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '',
+    { preload: preload, create: create, update: update });
 
 function preload() {
 
@@ -125,7 +126,7 @@ function update() {
 
     if (cursors.left.isDown && canMove)
     {
-        
+        emptyText();
         //  Move to the left
         player.body.velocity.x = -150;
 
@@ -133,9 +134,7 @@ function update() {
     }
     else if (cursors.right.isDown && canMove)
     {
-        console.log("Counter:: " + counter);
-        console.log("Player x:: " + player.x);
-        console.log(player.x - counter);
+        emptyText();
         
         if((player.x - counter) >= 200 && !starExists){
             
@@ -178,11 +177,12 @@ function update() {
 
 function collectStar (player, star) {
     
+    scoreText.text = "Spell " + theWord;
+
     // Removes the star from the screen
     star.kill();
 
     //  make character not move
-
     immobile();
 
     starExists = false;
@@ -199,18 +199,22 @@ function keyPress(char){
     }else{
         inputText.text += char;
         var code = char.charCodeAt(0);
-        console.log(char + " charChodeAt : " + code + " Game input:: " + game.input.keyboard.event.keyCode);
     }    
 }
 
 function checkWord(userWord){
     if(theWord == userWord){
         //stuff
-        console.log("Shit happens!");
+        inputText.text = "Nice!"
         canMove = true;
     }
 }
 
 function immobile(){
     canMove = false;
+}
+
+function emptyText(){
+    inputText.text = "";
+    scoreText.text = "";
 }
