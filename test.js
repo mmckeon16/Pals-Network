@@ -13,8 +13,6 @@ function preload() {
 var player;
 var platforms;
 var cursors;
-var boundary;
-var boundary2;
 
 var stars;
 var score = 0;
@@ -25,13 +23,15 @@ var counter = 0.0;
 var theWord = "cat";
 
 var canMove = true;
+var canType = false;
 var starExists;
 
 function create() {
 
-    //scaling
+    //  scaling
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
+    //  Sets world bounds
     game.world.setBounds(0,0,4000,600);
 
     //  We're going to be using physics, so enable the Arcade Physics system
@@ -55,12 +55,12 @@ function create() {
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
-    // //  Now let's create two ledges
-    // var ledge = platforms.create(400, 400, 'ground');
-    // ledge.body.immovable = true;
+    //  Now let's create two ledges
+    var ledge = platforms.create(getRand(-150,400), getRand(400,800), 'ground');
+    ledge.body.immovable = true;
 
-    // ledge = platforms.create(-150, 250, 'ground');
-    // ledge.body.immovable = true;
+    ledge = platforms.create(getRand(-150,400), getRand(400,800), 'ground');
+    ledge.body.immovable = true;
 
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
@@ -96,8 +96,8 @@ function create() {
     star.body.bounce.y = 0.7 + Math.random() * 0.2;
 
     //  The score
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-    inputText = game.add.text(200, 16, '', { fontSize: '32px', fill: '#000' });
+    scoreText = game.add.text(16, 16, '', { fontSize: '32px', fill: '#000' });
+    inputText = game.add.text(16, 50, '', { fontSize: '32px', fill: '#000' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
@@ -107,6 +107,7 @@ function create() {
 
 function update() {
 
+    // checks if star exists, if it does the camera stays in one spot
     if(!starExists){
         game.camera.follow(player);
     }
@@ -124,6 +125,7 @@ function update() {
     //  Reset the players velocity (movement)
     player.body.velocity.x = 0;
 
+    // Controls input from arrow buttons
     if (cursors.left.isDown && canMove)
     {
         emptyText();
@@ -153,7 +155,6 @@ function update() {
             game.world.sendToBack(sky);
         }
         
-
         //  Move to the right
         player.body.velocity.x = 150;
 
@@ -190,6 +191,7 @@ function collectStar (player, star) {
 }
 
 function keyPress(char){
+    if(canType){
     if(game.input.keyboard.event.keyCode == 8){
         inputText.text = inputText.text.substring(0,inputText.text.length - 1);
     }else if(game.input.keyboard.event.keyCode == 13){
@@ -199,22 +201,33 @@ function keyPress(char){
     }else{
         inputText.text += char;
         var code = char.charCodeAt(0);
+    }
     }    
 }
 
 function checkWord(userWord){
+
     if(theWord == userWord){
         //stuff
         inputText.text = "Nice!"
         canMove = true;
     }
+    else{
+        emptyText();
+        scoreText.text = "Try again, Spell " + theWord;
+    }
 }
 
 function immobile(){
     canMove = false;
+    canType = true;
 }
 
 function emptyText(){
     inputText.text = "";
     scoreText.text = "";
+}
+
+function getRand(min, max) {
+  return Math.random() * (max - min) + min;
 }
