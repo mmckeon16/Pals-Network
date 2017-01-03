@@ -29,6 +29,7 @@ var starExists;
 
 function create() {
 
+
     //box = new Phaser.Rectangle(770, 0, 50, 600);
     
     //  scaling
@@ -58,6 +59,13 @@ function create() {
     //  This stops it from falling away when you jump on it
     ground.body.immovable = true;
 
+    //  Now let's create two ledges
+    var ledge = platforms.create(getRand(-150,400), getRand(400,800), 'ground');
+    ledge.body.immovable = true;
+
+    ledge = platforms.create(getRand(-150,400), getRand(400,800), 'ground');
+    ledge.body.immovable = true;
+
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'dude');
 
@@ -69,6 +77,16 @@ function create() {
     player.body.gravity.y = 300;
     player.body.collideWorldBounds = true;
 
+    //box creation/physics
+
+    box = platforms.create(770,30);
+    box.scale.setTo(50,600);
+    box.enableBody = true;
+    box.body.immovable = true;
+    box.visible = false;
+
+    game.physics.arcade.enable(box);
+
     //  Our two animations, walking left and right.
     player.animations.add('left', [0, 1, 2, 3], 10, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
@@ -79,14 +97,25 @@ function create() {
     //  We will enable physics for any star that is created in this group
     stars.enableBody = true;
 
+    //  Create a star inside of the 'stars' group
+    var star = stars.create(400, 0, 'star');
+    starExists = true;
+
     game.camera.follow(player);
 
+    //  Let gravity do its thing
+    star.body.gravity.y = 300;
+
+    //  This just gives each star a slightly random bounce value
+    star.body.bounce.y = 0.7 + Math.random() * 0.2;
+
+    //  The score
+    scoreText = game.add.text(400, 16, '', { fontSize: '32px', fill: '#000' });
+    inputText = game.add.text(400, 200, '', { fontSize: '32px', fill: '#000' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
-    
-    
-    checkpoint();
+    inputText.fixedToCamera = true;
 
 }
 
@@ -190,12 +219,13 @@ function keyPress(char){
             checkWord(userText);
         }else{
             inputText.text += char;
+            var code = char.charCodeAt(0);
         }
     }    
 }
 
 function checkWord(userWord){
-    // grab theWord SHIT
+
     if(theWord == userWord){
         //stuff to be implemented later to check word
         inputText.text = "Nice!"
@@ -215,8 +245,8 @@ function immobile(){
 }
 
 function emptyText(){
-    inputText.kill();
-    scoreText.kill();
+    inputText.text = "";
+    scoreText.text = "";
 }
 
 function getRand(min, max) {
@@ -225,47 +255,29 @@ function getRand(min, max) {
 
 function checkpoint(){
     //get the star location
-    var starLocation = getRand(player.x+100, player.x + 900);
+    var starLocation = getRand(player.x, player.x + 800);
     //create the star and add its physics
     var star = stars.create(starLocation, 0, 'star');
     star.body.gravity.y = 300;
     star.body.bounce.y = 0.7 + Math.random() * 0.2;
 
-    //Change the labels location and text based on the new question
-
-    // Adding the text labels
-    scoreText = game.add.text(400, 16, '', { fontSize: '32px', fill: '#000' });
-    inputText = game.add.text(400, 200, '', { fontSize: '32px', fill: '#000' });
-    inputText.fixedToCamera = true;
-    scoreText.fixedToCamera = true;
-
-    // scoreText.setTextBounds(starLocation-20,16);
-    // inputText.setTextBounds(starLocation-20,200);
-    
-
     //do something with like within the players range? SHIT
-        starExists = true;
+        //starExists = true;
 
-    //create the platforms with jakes stuff SHIT
+    //create the platforms with jakes stuff
 
-    var ledge = platforms.create(getRand(starLocation-150,starLocation + 400), getRand(starLocation + 400,
-        starLocation + 800), 'ground');
-    ledge.body.immovable = true;
 
-    ledge = platforms.create(getRand(starLocation-150,starLocation + 400), getRand(starLocation + 400,
-        starLocation + 800), 'ground');
-    ledge.body.immovable = true;
+    //create the invisible barriers
 
-    //create the invisible barriers SHIT
-
-    box = platforms.create(starLocation + 100,30);
+    box = platforms.create(starLocation + 400,30);
     box.scale.setTo(50,600);
     box.enableBody = true;
-    //box.body.immovable = true;
+    box.body.immovable = true;
     box.visible = false;
     game.physics.arcade.enable(box);
+
     game.physics.arcade.collide(player, box);
-    game.world.sendToBack(sky);
+
 
 
 
