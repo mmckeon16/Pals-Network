@@ -154,7 +154,7 @@ function update() {
     // Controls input from arrow buttons
     if (cursors.left.isDown && canMove)
     {
-        emptyText();
+        niceText.text = "";
         //  Move to the left
         player.body.velocity.x = -150;
 
@@ -162,7 +162,7 @@ function update() {
     }
     else if (cursors.right.isDown && canMove)
     {
-        emptyText();
+        niceText.text = "";
         
         if((player.x - counter) >= 200){
             
@@ -202,7 +202,7 @@ function update() {
 
     if(starLocation-200 <= player.x && canMove){
         collectText.text = "Collect the star!";
-        collectText.x = Math.floor(star.x + star.width / 2);
+        //collectText.x = Math.floor(star.x + star.width / 2);
         collectText.x = star.x - collectText.width/2;
     }
 
@@ -246,6 +246,7 @@ function checkWord(userWord){
     if(theWord == userWord){
         //stuff to be implemented later to check word
         niceText.text = "Nice!";
+        emptyText();
         canMove = true;
         canType = false;
         checkpoint();
@@ -280,9 +281,9 @@ function checkpoint(){
     star.body.gravity.y = 300;
     star.body.bounce.y = 0.7 + Math.random() * 0.2;
 
-    inputText.x = star.x - inputText.width/2;
-    scoreText.x = star.x - scoreText.width/2;
-    niceText.x = player.x - inputText.width/2;
+    inputText.x = star.x - 40//inputText.width/2;
+    scoreText.x = star.x - 70//scoreText.width/2;
+    niceText.x = player.x - niceText.width/2;
     
     //do something with like within the players range? SHIT
         //starExists = true;
