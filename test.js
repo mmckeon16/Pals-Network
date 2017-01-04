@@ -17,8 +17,11 @@ var box;
 
 var stars;
 var score = 0;
+var starLocation=0;
+
 var scoreText;
 var inputText;
+var collectText;
 
 var counter = 0.0;
 var theWord = "cat";
@@ -112,12 +115,14 @@ function create() {
     //  The score
     scoreText = game.add.text(400, 16, '', { fontSize: '32px', fill: '#000' });
     inputText = game.add.text(400, 200, '', { fontSize: '32px', fill: '#000' });
+    collectText = game.add.text(400,16, '', { fontSize: '32px', fill: '#000' });
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
     
     inputText.fixedToCamera = true;
     scoreText.fixedToCamera = true;
+    collectText.fixedToCamera = true;
 }
 
 function update() {
@@ -191,10 +196,14 @@ function update() {
         player.body.velocity.y = -350;
     }
 
+    if(starLocation-200 <= player.x && canMove){
+        collectText.text = "Collect the star!";
+    }
+
 }
 
 function collectStar (player, star) {
-    
+    collectText.text = "";
     scoreText.text = "Spell " + theWord;
 
     // Removes the star from the screen
@@ -229,10 +238,11 @@ function checkWord(userWord){
 
     if(theWord == userWord){
         //stuff to be implemented later to check word
-        inputText.text = "Nice!"
+        inputText.text = "Nice!";
         canMove = true;
         canType = false;
         checkpoint();
+
     }
     else{
         emptyText();
@@ -256,7 +266,7 @@ function getRand(min, max) {
 
 function checkpoint(){
     //get the star location
-    var starLocation = getRand(player.x+200, player.x + 800);
+    starLocation = getRand(player.x+200, player.x + 800);
     //create the star and add its physics
     var star = stars.create(starLocation, 0, 'star');
     star.body.gravity.y = 300;
