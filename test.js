@@ -83,7 +83,7 @@ function create() {
     box.scale.setTo(50,600);
     box.enableBody = true;
     box.body.immovable = true;
-    box.visible = false;
+    box.visible = true;
 
     game.physics.arcade.enable(box);
 
@@ -115,8 +115,9 @@ function create() {
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
+    
     inputText.fixedToCamera = true;
-
+    scoreText.fixedToCamera = true;
 }
 
 function update() {
@@ -255,7 +256,7 @@ function getRand(min, max) {
 
 function checkpoint(){
     //get the star location
-    var starLocation = getRand(player.x, player.x + 800);
+    var starLocation = getRand(player.x+200, player.x + 800);
     //create the star and add its physics
     var star = stars.create(starLocation, 0, 'star');
     star.body.gravity.y = 300;
@@ -269,19 +270,14 @@ function checkpoint(){
 
     //create the invisible barriers
 
-    box = platforms.create(starLocation + 400,30);
+    box = platforms.create(starLocation + 200,30);
     box.scale.setTo(50,600);
     box.enableBody = true;
     box.body.immovable = true;
-    box.visible = false;
+    box.visible = true;
     game.physics.arcade.enable(box);
 
     game.physics.arcade.collide(player, box);
-
-
-
-
-
 
 
 }
