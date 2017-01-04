@@ -74,7 +74,7 @@ function create() {
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.body.bounce.y = 0.2;
-    player.body.gravity.y = 300;
+    player.body.gravity.y = 800;
     player.body.collideWorldBounds = true;
 
     //box creation/physics
@@ -110,8 +110,9 @@ function create() {
     star.body.bounce.y = 0.7 + Math.random() * 0.2;
 
     //  The score
-    scoreText = game.add.text(400, 16, '', { fontSize: '32px', fill: '#000' });
-    inputText = game.add.text(400, 200, '', { fontSize: '32px', fill: '#000' });
+    scoreText = game.add.text(350, 16, '', { font: "32px Verdana", fill: '#000' });
+    inputText = game.add.text(380, 200, '', { font: "38px Verdana", fontWeight: 'bold', fill: '#000' });
+
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
