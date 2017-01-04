@@ -14,6 +14,7 @@ var player;
 var platforms;
 var cursors;
 var box;
+var box2;
 
 var stars;
 var score = 0;
@@ -198,6 +199,7 @@ function update() {
 
     if(starLocation-200 <= player.x && canMove){
         collectText.text = "Collect the star!";
+        box2.visible = true;
     }
 
 }
@@ -288,6 +290,15 @@ function checkpoint(){
     game.physics.arcade.enable(box);
 
     game.physics.arcade.collide(player, box);
+
+    box2 = platforms.create(starLocation - 200,30);
+    box2.scale.setTo(50,600);
+    box2.enableBody = true;
+    box2.body.immovable = true;
+    box2.visible = false;
+    game.physics.arcade.enable(box2);
+
+    game.physics.arcade.collide(player, box2);
 
 
 }
