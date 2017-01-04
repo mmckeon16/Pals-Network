@@ -256,7 +256,7 @@ function getRand(min, max) {
 
 function checkpoint(){
     //get the star location
-    var starLocation = getRand(player.x+200, player.x + 800);
+    var starLocation = getRand(player.x+500, player.x + 1200);
     //create the star and add its physics
     var star = stars.create(starLocation, 0, 'star');
     star.body.gravity.y = 300;
