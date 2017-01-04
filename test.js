@@ -17,26 +17,30 @@ var box;
 
 var stars;
 var score = 0;
+var starLocation=0;
+
 var scoreText;
 var inputText;
+var collectText;
 
 var counter = 0.0;
-var theWord = "cat";
+var theWord;
 
 var canMove = true;
 var canType = false;
 var starExists;
+var star=0;
 
 function create() {
 
-
+    getWord();
     //box = new Phaser.Rectangle(770, 0, 50, 600);
     
     //  scaling
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     //  Sets world bounds
-    game.world.setBounds(0,0,6000,600);
+    game.world.setBounds(0,0,4000,600);
 
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -74,7 +78,7 @@ function create() {
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.body.bounce.y = 0.2;
-    player.body.gravity.y = 800;
+    player.body.gravity.y = 300;
     player.body.collideWorldBounds = true;
 
     //box creation/physics
@@ -112,14 +116,17 @@ function create() {
     //  The score
     scoreText = game.add.text(350, 16, '', { font: "32px Verdana", fill: '#000' });
     inputText = game.add.text(380, 200, '', { font: "38px Verdana", fontWeight: 'bold', fill: '#000' });
+    collectText = game.add.text(350, 16, '', { font: "32px Verdana", fill: '#000' });
+    niceText = game.add.text(380, 200, '', { font: "38px Verdana", fontWeight: 'bold', fill: '#000' });
+
 
     //  Our controls.
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
     
    // inputText.fixedToCamera = true;
-   // scoreText.fixedToCamera = true;
-
+    //scoreText.fixedToCamera = true;
+    // collectText.fixedToCamera = true;
 }
 
 function update() {
@@ -192,10 +199,18 @@ function update() {
     {
         player.body.velocity.y = -350;
     }
+
+    if(starLocation-200 <= player.x && canMove){
+        collectText.text = "Collect the star!";
+        collectText.x = Math.floor(star.x + star.width / 2);
+        collectText.x = star.x - collectText.width/2;
+    }
+
 }
 
 function collectStar (player, star) {
-    
+
+    collectText.text = "";
     scoreText.text = "Spell " + theWord;
 
     // Removes the star from the screen
@@ -230,10 +245,12 @@ function checkWord(userWord){
 
     if(theWord == userWord){
         //stuff to be implemented later to check word
-        inputText.text = "Nice!"
+        niceText.text = "Nice!";
         canMove = true;
         canType = false;
         checkpoint();
+        getWord();
+
     }
     else{
         emptyText();
@@ -257,18 +274,16 @@ function getRand(min, max) {
 
 function checkpoint(){
     //get the star location
-    var starLocation = getRand(player.x+500, player.x + 1200);
+    starLocation = getRand(player.x, player.x + 400);
     //create the star and add its physics
-    var star = stars.create(starLocation, 0, 'star');
+    star = stars.create(starLocation, 0, 'star');
     star.body.gravity.y = 300;
     star.body.bounce.y = 0.7 + Math.random() * 0.2;
 
-    inputText.x = Math.floor(star.x + star.width / 2);
-    scoreText.y = Math.floor(star.y + star.height / 2);
-
     inputText.x = star.x - inputText.width/2;
     scoreText.x = star.x - scoreText.width/2;
-
+    niceText.x = player.x - inputText.width/2;
+    
     //do something with like within the players range? SHIT
         //starExists = true;
 
@@ -287,6 +302,31 @@ function checkpoint(){
     game.physics.arcade.collide(player, box);
 
 
+}
+
+function getWord(){
+        var theRequest;
+        var url = "database.php";
+        if (window.XMLHttpRequest){
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+            theRequest=new XMLHttpRequest();
+        }
+        else {// code for IE6, IE5
+            theRequest=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        theRequest.onreadystatechange=function()
+        {
+            if (theRequest.readyState == 4)
+            {
+                //alert(theRequest.responseText);
+                theWord=theRequest.responseText;
+            }
+        }
+
+        theRequest.open("GET", url, true);
+        theRequest.setRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT");
+        theRequest.send(null);
 }
 
 
