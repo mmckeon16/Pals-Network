@@ -36,7 +36,7 @@ function create() {
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     //  Sets world bounds
-    game.world.setBounds(0,0,4000,600);
+    game.world.setBounds(0,0,6000,600);
 
     //  We're going to be using physics, so enable the Arcade Physics system
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -116,8 +116,9 @@ function create() {
     cursors = game.input.keyboard.createCursorKeys();
     game.input.keyboard.addCallbacks(this, null, null, keyPress);
     
-    inputText.fixedToCamera = true;
-    scoreText.fixedToCamera = true;
+   // inputText.fixedToCamera = true;
+   // scoreText.fixedToCamera = true;
+
 }
 
 function update() {
@@ -190,7 +191,6 @@ function update() {
     {
         player.body.velocity.y = -350;
     }
-
 }
 
 function collectStar (player, star) {
@@ -261,6 +261,12 @@ function checkpoint(){
     var star = stars.create(starLocation, 0, 'star');
     star.body.gravity.y = 300;
     star.body.bounce.y = 0.7 + Math.random() * 0.2;
+
+    inputText.x = Math.floor(star.x + star.width / 2);
+    scoreText.y = Math.floor(star.y + star.height / 2);
+
+    inputText.x = star.x - inputText.width/2;
+    scoreText.x = star.x - scoreText.width/2;
 
     //do something with like within the players range? SHIT
         //starExists = true;
